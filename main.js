@@ -106,7 +106,11 @@ function main()
   }
   if(autoabil)
   {
-    if(i == hlength) return;
+    if(i == hlength) 
+    {
+      calls--;
+      return;
+    }
     for(j = i; j < hlength; j++)
     {
       var abil = heroes[j].childNodes[1];

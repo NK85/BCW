@@ -8,7 +8,8 @@ var abilscreen = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
 var clicklimit = 2;
-var loopinterval = 917;
+var loopinterval = 417;
+var calls = 0;
 
 function Random(min,max)
 {
@@ -22,11 +23,18 @@ function bot()
 
 function main()
 {
+  calls++;
+  if(calls > 1)
+  {
+    calls--;
+    return;
+  }
   if(autoclick)
   {
     if(parseInt(document.getElementsByClassName("boss-lvl")[0].childNodes[2].childNodes[0].data) <= clicklimit)
     {
       document.title = "CLICK";
+      calls--;
       return;
     }
     document.title = "FT"
@@ -47,6 +55,7 @@ function main()
       abilscreen = 0;
       document.getElementsByClassName("btn-close-x")[0].click();
     }
+    calls--;
     return;
   }
   heroes = document.getElementsByClassName("hero-card");
@@ -104,10 +113,12 @@ function main()
         if(abil.className.indexOf("ready") == -1) continue;
         abil.click();
         abilscreen = 1;
+        calls--;
         return;
       }
     }
   }
+  calls--;
 }
   
 function CheckAbil(abil)

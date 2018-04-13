@@ -11,6 +11,9 @@ var clicklimit = 2;
 var loopinterval = 417;
 var calls = 0;
 
+//document.getElementsByClassName("boss-txt")[0].click()
+//
+
 function Random(min,max)
 {
   return Math.floor((Math.random() * (max-min+1))+min);

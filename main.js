@@ -6,15 +6,31 @@ var autoreborn = 1;
 var rebornlvl = 45;
 var abilscreen = 0;
 var lvllimit = ParseGold("100B");
-
+var autoclick = 1;
+var clicklimit = 2;
+var loopinterval = 917;
 
 function Random(min,max)
 {
   return Math.floor((Math.random() * (max-min+1))+min);
 }
 
+function bot()
+{
+  main();
+}
+
 function main()
 {
+  if(autoclick)
+  {
+    if(parseInt(document.getElementsByClassName("boss-lvl")[0].childNodes[2].childNodes[0].data) <= clicklimit)
+    {
+      document.title = "CLICK";
+      return;
+    }
+    document.title = "FT"
+  }
   if(abilscreen)
   {
     var abils = document.getElementsByClassName("abil locked");
@@ -34,8 +50,9 @@ function main()
     return;
   }
   heroes = document.getElementsByClassName("hero-card");
+  var hlength = heroes.length - 2;
   var i;
-  for(i = 0; i < heroes.length; i++)
+  for(i = 0; i < hlength; i++)
   {
     if(heroes[i].childNodes.length < 6)
     {
@@ -45,16 +62,16 @@ function main()
   }
   if(autobuy)
   {
-    if(i == heroes.length) 
+    if(i == hlength) 
     {
-      if(CheckBuy(1,heroes[i]))
-      {setTimeout(HeroUnlock,Random(300,600),heroes[i]);}
+      if(CheckBuy(10,heroes[i-1]))
+      {setTimeout(HeroUnlock,Random(300,600),heroes[i-1]);}
     }
     else
     {
       if(GetHeroLevel(heroes[i]) < 10)
       {
-        if(CheckBuy(1,heroes[i]))
+        if(CheckBuy(10,heroes[i]))
         {setTimeout(HeroBuy,Random(300,600),10,heroes[i]);}
         //todo: upgrades
       }
@@ -70,15 +87,15 @@ function main()
       }
       else
       {
-        if(CheckBuy(10,heroes[i]))
+        if(CheckBuy(10,heroes[i-1]))
         {setTimeout(HeroUnlock,Random(300,600),heroes[i-1]);}
       }
     }
   }
   if(autoabil)
   {
-    if(i == heroes.length) return;
-    for(j = i; j < heroes.length; j++)
+    if(i == hlength) return;
+    for(j = i; j < hlength; j++)
     {
       var abil = heroes[j].childNodes[1];
       if(abil.data == null)
@@ -239,4 +256,4 @@ function GetHeroLevel(hero)
   return parseInt(hero.childNodes[4].childNodes[0].childNodes[0].data);
 }
 
-//document.getElementsByClassName("hero-card")[4].childNodes[5].click()
+var botinterval = setInterval(bot,loopinterval);

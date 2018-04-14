@@ -45,8 +45,16 @@ function bot()//loop through features
     //calls--;
     //return;
   }
-  if(rebornscreen1) return RebornScreen(1);
-  if(rebornscreen2) return RebornScreen(2);
+  if(rebornscreen1) 
+  {
+    RebornScreen(1);
+    return setTimeout(bot,loopinterval);
+  }
+  if(rebornscreen2) 
+  {
+    RebornScreen(2);
+    return setTimeout(bot,loopinterval);
+  }
   if(autoclick && ClickRange())
   {
     document.title = "CLICK";

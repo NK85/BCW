@@ -14,16 +14,17 @@ var abilscreen = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
 var clicklimit = 2;
-var loopinterval = 417;
+var loopinterval = 601;
 var calls = 0;
-var delay = 2000;
+var delay = 5000;
 
 //document.getElementsByClassName("boss-txt")[0].click()
 //
 
 function DelayScript()//delay start of script
 {
-  setInterval(bot,loopinterval);
+  //setInterval(bot,loopinterval);
+  bot();
 }
 
 function Random(min,max)//random int
@@ -36,33 +37,34 @@ function bot()//loop through features
   calls++;
   if(calls > 1)
   {
-    calls--;
-    return;
+    //calls--;
+    //return;
   }
   if(autoclick && ClickRange())
   {
     document.title = "CLICK";
     calls--;
-    return;
+    return setTimeout(bot,loopinterval);
   }
   document.title = "FT"
   if(abilscreen && autoabil)
   {
     AbilScreen();
     calls--;
-    return;
+    return setTimeout(bot,loopinterval);
   }
   UpdateHeroes();
   if(autoabil) AutoAbil();
   if(reborning == 1) 
   {
     AutoReborn();
-    return;
+    return setTimeout(bot,loopinterval);
   }
   if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
   calls--;
+  setTimeout(bot,loopinterval);
 }
 
 function AutoReborn()
@@ -367,4 +369,4 @@ function GetHeroLevel(hero)//get level of a hero
   return parseInt(hero.childNodes[4].childNodes[0].childNodes[0].data);
 }
 
-setTimeout(DelayScript,3000);
+setTimeout(DelayScript,delay);

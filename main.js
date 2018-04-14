@@ -1,5 +1,7 @@
 var wait = 0;
 var heroes;
+var unlockedheroes;
+var heroeslength;
 var autobuy = 1;
 var autoabil = 1;
 var autoreborn = 1;
@@ -10,21 +12,22 @@ var autoclick = 1;
 var clicklimit = 2;
 var loopinterval = 417;
 var calls = 0;
+var delay = 2000;
 
 //document.getElementsByClassName("boss-txt")[0].click()
 //
 
-function Random(min,max)
+function DelayScript()//delay start of script
+{
+  setInterval(bot,loopinterval);
+}
+
+function Random(min,max)//random int
 {
   return Math.floor((Math.random() * (max-min+1))+min);
 }
 
-function bot()
-{
-  main();
-}
-
-function main()
+function bot()//loop through features
 {
   calls++;
   if(calls > 1)
@@ -32,55 +35,80 @@ function main()
     calls--;
     return;
   }
-  if(autoclick)
+  if(autoclick && ClickRange())
   {
-    if(parseInt(document.getElementsByClassName("boss-lvl")[0].childNodes[2].childNodes[0].data) <= clicklimit)
-    {
-      document.title = "CLICK";
-      calls--;
-      return;
-    }
-    document.title = "FT"
-  }
-  if(abilscreen)
-  {
-    var abils = document.getElementsByClassName("abil locked");
-    for(i = 0;i < abils.length;i++)
-    {
-      if(CheckAbil(abils[i]))
-      {
-        setTimeout(AbilBuy,Random(300,600),abils[i]);
-        break;
-      }
-    }
-    if(i == abils.length)
-    {
-      abilscreen = 0;
-      document.getElementsByClassName("btn-close-x")[0].click();
-    }
+    document.title = "CLICK";
     calls--;
     return;
   }
-  heroes = document.getElementsByClassName("hero-card");
-  var hlength = heroes.length - 2;
-  var i;
-  for(i = 0; i < hlength; i++)
+  document.title = "FT"
+  if(abilscreen && autoabil)
   {
-    if(heroes[i].childNodes.length < 6)
-    {
-      continue;
-    }
-    break;
+    AbilScreen();
+    calls--;
+    return;
   }
-  if(autobuy)
+}
+
+function ClickRange()//Check if stage is under clicklimit
+{
+  return (GetBossLevel() <= clicklimit);
+}
+
+function GetBossLevel()//return boss level
+{
+  return parseInt(document.getElementsByClassName("boss-lvl")[0].childNodes[2].childNodes[0].data);
+}
+
+function AbilScreen()
+{
+  var abils = document.getElementsByClassName("abil locked");
+  for(i = 0;i < abils.length;i++)
   {
-    if(i == hlength) 
+    if(CheckAbil(abils[i]))
     {
-      if(CheckBuy(10,heroes[i-1]))
-      {setTimeout(HeroUnlock,Random(300,600),heroes[i-1]);}
+      setTimeout(AbilBuy,Random(300,600),abils[i]);
+      break;
+    }
+  }
+  if(i == abils.length)
+  {
+    abilscreen = 0;
+    document.getElementsByClassName("btn-close-x")[0].click();
+  }
+  UpdateHeroes();
+  if(autobuy) AutoBuy();
+  if(autoabil) AutoAbil();
+  calls--;
+}
+
+function AutoAbil()
+{
+    if(unlockedheroes == 0) return;
+    for(j = GetHeroById(-1); j < heroeslength; j++)
+    {
+      var abil = heroes[j].childNodes[1];
+      if(abil.data == null)
+      {
+        if(abil.className.indexOf("disable") != -1) continue;
+        if(abil.className.indexOf("ready") == -1) continue;
+        abil.click();
+        abilscreen = 1;
+        return;
+      }
+    }
+}
+
+function AutoBuy()
+{
+  if(unlockedheroes == 0) 
+    {
+      if(CheckBuy(10,heroes[heroeslength-1]))
+      {setTimeout(HeroUnlock,Random(300,600),heroes[heroeslength-1]);}
     }
     else
     {
+      var i = GetHeroById(-1);
       if(GetHeroLevel(heroes[i]) < 10)
       {
         if(CheckBuy(10,heroes[i]))
@@ -103,43 +131,41 @@ function main()
         {setTimeout(HeroUnlock,Random(300,600),heroes[i-1]);}
       }
     }
-  }
-  if(autoabil)
+}
+
+function UpdateHeroes()//update heroes info
+{
+  heroes = document.getElementsByClassName("hero-card");
+  heroeslength = heroes.length - 2;
+  for(unlockedheroes = 0; unlockedheroes < heroeslength; unlockedheroes++)
   {
-    if(i == hlength) 
+    if(heroes[unlockedheroes].childNodes.length < 6)
     {
-      calls--;
-      return;
+      continue;
     }
-    for(j = i; j < hlength; j++)
-    {
-      var abil = heroes[j].childNodes[1];
-      if(abil.data == null)
-      {
-        if(abil.className.indexOf("disable") != -1) continue;
-        if(abil.className.indexOf("ready") == -1) continue;
-        abil.click();
-        abilscreen = 1;
-        calls--;
-        return;
-      }
-    }
+    break;
   }
-  calls--;
+  unlockedheroes = heroeslength - unlockedheroes;
+}
+
+function GetHeroById(id)//get heroes index of hero id
+{
+  if(id == -1) return heroeslength - unlockedheroes;
+  return heroeslength - id;
 }
   
-function CheckAbil(abil)
+function CheckAbil(abil)//check if ability is buyable
 {
   var abilgold = GetAbilGold(abil);
   return (abilgold < GetGold() && abilgold >= 0);
 }
 
-function AbilBuy(abil)
+function AbilBuy(abil)//buy ability
 {
   abil.childNodes[3].click();
 }
 
-function GetAbilGold(abil)
+function GetAbilGold(abil)//get price of given ability
 {
   var abildata = abil.childNodes[3].childNodes[0].childNodes[0].data;
   if(abildata.indexOf("Level") == -1)
@@ -149,42 +175,18 @@ function GetAbilGold(abil)
   return -1;
 }
 
-function CheckBuy(x, hero)
+function CheckBuy(x, hero)//check if x of given hero is buyable
 {
   SelectBuy(x);
   return (GetHeroGold(hero) < GetGold());
 }
   
-function WaitToUnlockHero(x, hero)
-{
-  while(1)
-  {
-    SelectBuy(x);
-    if(GetHeroGold(hero) < GetGold())
-    {
-      break;
-    }
-  }
-}
-  
-function HeroUnlock(hero)
+function HeroUnlock(hero)//unlock locked hero
 {
   hero.childNodes[4].click();
 }
 
-function WaitToBuyHero(x, hero)
-{
-  while(1)
-  {
-    SelectBuy(x);
-    if(GetHeroGold(hero) < GetGold())
-    {
-      break;
-    }
-  }
-}
-
-function SelectBuy(x)
+function SelectBuy(x)//click buy x button
 {
   var buyx = document.getElementsByClassName("all-x2-panel-box")[0].childNodes;
   switch(x)
@@ -204,18 +206,18 @@ function SelectBuy(x)
   }
 }
 
-function HeroBuy(x, hero)
+function HeroBuy(x, hero)//buy x amount of a hero
 {
   SelectBuy(x);
   hero.childNodes[5].click();
 }
 
-function GetGold()
+function GetGold()//get account gold
 {
   return ParseGold(document.getElementsByClassName("res gold")[0].childNodes[0].childNodes[0].data);
 }
 
-function ParseGold(goldt)
+function ParseGold(goldt)//parse gold string
 {
   var gold = 0.0;
   var i = 0;
@@ -265,15 +267,15 @@ function ParseGold(goldt)
   return gold;
 }
   
-function GetHeroGold(hero)
+function GetHeroGold(hero)//get price of buying hero
 {
   var child = hero.childNodes;
   return ParseGold(child[child.length-1].childNodes[0].childNodes[0].data);
 }
   
-function GetHeroLevel(hero)
+function GetHeroLevel(hero)//get level of a hero
 {
   return parseInt(hero.childNodes[4].childNodes[0].childNodes[0].data);
 }
 
-var botinterval = setInterval(bot,loopinterval);
+setTimeout(DelayScript,3000);

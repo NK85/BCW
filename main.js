@@ -2,6 +2,7 @@ var wait = 0;
 var heroes;
 var unlockedheroes;
 var heroeslength;
+var enablebot = 1;
 var autobuy = 1;
 var autoabil = 1;
 var autoreborn = 1;

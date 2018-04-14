@@ -8,6 +8,7 @@ var autoreborn = 1;
 var autoboss = 1;
 var rebornlvl = 45;
 var reborning = 0;
+var reborndelay = 5000;
 var reborns = 0;
 var abilscreen = 0;
 var lvllimit = ParseGold("100B");
@@ -52,9 +53,13 @@ function bot()//loop through features
     return;
   }
   UpdateHeroes();
-  if(reborning) AutoReborn();
-  if(autobuy) AutoBuy();
   if(autoabil) AutoAbil();
+  if(reborning == 1) 
+  {
+    AutoReborn();
+    return;
+  }
+  if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
   calls--;
@@ -76,7 +81,11 @@ function AutoReborn()
       }
     }
   }
-  if(av == 0) Reborn();
+  if(av == 0 && reborning == 1) 
+  {
+    reborning = 2;
+    setTimeout(Reborn,reborndelay);
+  }
 }
 
 function Reborn()

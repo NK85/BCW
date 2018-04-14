@@ -14,9 +14,11 @@ var abilscreen = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
 var clicklimit = 2;
-var loopinterval = 601;
+var loopinterval = 501;
 var calls = 0;
 var delay = 5000;
+var reactionmin = 250;
+var reactionmax = 500;
 
 //document.getElementsByClassName("boss-txt")[0].click()
 //
@@ -40,6 +42,8 @@ function bot()//loop through features
     //calls--;
     //return;
   }
+  if(rebornscreen1) return RebornScreen(1);
+  if(rebornscreen2) return RebornScreen(2);
   if(autoclick && ClickRange())
   {
     document.title = "CLICK";
@@ -78,7 +82,7 @@ function AutoReborn()
       av++;
       if(CheckBuy(25,heroes[i]))
       {
-        setTimeout(HeroBuy,Random(300,600),25,heroes[i]);
+        setTimeout(HeroBuy,Random(reactionmin,reactionmax),25,heroes[i]);
         return;
       }
     }
@@ -92,8 +96,36 @@ function AutoReborn()
 
 function Reborn()
 {
-  reborning = 0;
-  reborns++;
+  var quests = document.getElementsByClassName("quests")[0];
+  for(i = 0; i < quests.childElementCount; i++)
+  {
+    if(quests.children[i].childNodes[0].currentSrc.indexOf("reborn") != -1)
+    {
+      reborning = 0;
+      reborns++;
+      quests.children[i].click();
+      rebornscreen1 = 1;
+    }
+  }
+}
+
+function RebornScreen(n)
+{
+  if(n == 1)
+  {
+    var yesbtn = document.getElementsByClassName("btn-box-2");
+    if(yesbtn.length == 0) return;
+    yesbtn[0].click();
+    rebornscreen2 = 1;
+    rebornscreen1 = 0;
+  }
+  if(n == 2)
+  {
+    var okbtn = document.getElementsByClassName("btn-simple-green btn-ok");
+    if(okbtn.length == 0) return;
+    okbtn[0].click();
+    rebornscreen2 = 0;
+  }
 }
 
 function AutoBoss()
@@ -162,7 +194,7 @@ function AbilScreen()
   {
     if(CheckAbil(abils[i]))
     {
-      setTimeout(AbilBuy,Random(300,600),abils[i]);
+      setTimeout(AbilBuy,Random(reactionmin,reactionmax),abils[i]);
       break;
     }
   }
@@ -195,7 +227,7 @@ function AutoBuy()
   if(unlockedheroes == 0) 
     {
       if(CheckBuy(10,heroes[heroeslength-1]))
-      {setTimeout(HeroUnlock,Random(300,600),heroes[heroeslength-1]);}
+      {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroes[heroeslength-1]);}
     }
     else
     {
@@ -203,23 +235,23 @@ function AutoBuy()
       if(GetHeroLevel(heroes[i]) < 10)
       {
         if(CheckBuy(10,heroes[i]))
-        {setTimeout(HeroBuy,Random(300,600),10,heroes[i]);}
+        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),10,heroes[i]);}
         //todo: upgrades
       }
       else if(GetHeroLevel(heroes[i]) <= 15)
       {
         if(CheckBuy(10,heroes[i]))
-        {setTimeout(HeroBuy,Random(300,600),10,heroes[i]);}
+        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),10,heroes[i]);}
       }
       else if(GetHeroLevel(heroes[i]) < 25)
       {
         if(CheckBuy(1,heroes[i]))
-        {setTimeout(HeroBuy,Random(300,600),1,heroes[i]);}
+        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),1,heroes[i]);}
       }
       else
       {
         if(CheckBuy(10,heroes[i-1]))
-        {setTimeout(HeroUnlock,Random(300,600),heroes[i-1]);}
+        {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroes[i-1]);}
       }
     }
 }

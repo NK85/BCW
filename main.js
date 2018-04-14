@@ -5,7 +5,9 @@ var heroeslength;
 var autobuy = 1;
 var autoabil = 1;
 var autoreborn = 1;
+var autoboss = 1;
 var rebornlvl = 45;
+var reborning = 0;
 var abilscreen = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
@@ -49,9 +51,85 @@ function bot()//loop through features
     return;
   }
   UpdateHeroes();
+  if(reborning) AutoReborn();
   if(autobuy) AutoBuy();
   if(autoabil) AutoAbil();
+  if(autoboss) AutoBoss();
+  if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
   calls--;
+}
+
+function AutoReborn()
+{
+  SelectBuy(25);
+  var av = 0;
+  for(int i = GetHeroById(-1); i < heroeslength; i++)
+  {
+    if(GetHeroGold(heroes[i]) < lvllimit)
+    {
+      av++;
+      if(CheckBuy(25,heroes[i]))
+      {
+        setTimeout(HeroBuy,Random(300,600),10,heroes[i]);
+        return;
+      }
+    }
+  }
+  if(av == 0) Reborn();
+}
+
+function Reborn()
+{
+  
+}
+
+function AutoBoss()
+{
+  var bossbtn = BossUnlocked();
+  if(bossbtn == 0) return;
+  var hp = GetBossHP();
+  var dps = GetDPS();
+  if((dps * 29) > hp)
+  {
+    bossbtn[0].click();
+  }
+}
+
+var GetDPS()
+{
+  return ParseGold(document.getElementsByClassName("dps-dpc-panel")[0].childNodes[1].childNodes[0].childNodes[0].data);
+}
+
+function GetBossHP()
+{
+  var lvl = GetBossLevel();
+  var hp = GetStageHP();
+  switch(lvl[lvl.length-1] % 5)
+  {
+    case 0:
+      return hp;
+    case 1:
+      hp *= 1.6;
+    case 2:
+      hp *= 1.6;
+    case 3:
+      hp *= 1.6
+    case 4:
+      hp *= 1.6;
+  }
+  return hp * 10;
+}
+
+function GetStageHP()
+{
+  return ParseGold(document.getElementsByClassName("to")[0].childNodes[0].data);
+}
+
+function BossUnlocked()
+{
+  var bossbtn = document.getElementsByClassName("boss-txt");
+  if(bossbtn.length == 0) return 0;
+  return bossbtn;
 }
 
 function ClickRange()//Check if stage is under clicklimit

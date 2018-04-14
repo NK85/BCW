@@ -20,7 +20,7 @@ var loopinterval = 501;
 var calls = 0;
 var delay = 5000;
 var reactionmin = 250;
-var reactionmax = 500;
+var reactionmax = 400;
 
 //document.getElementsByClassName("boss-txt")[0].click()
 //
@@ -52,7 +52,13 @@ function bot()//loop through features
     calls--;
     return setTimeout(bot,loopinterval);
   }
-  document.title = "FT"
+  else
+  {
+    if(document.title.indexOf("CLICK") != -1)
+    {
+      document.title = "FT"
+    }
+  }
   if(abilscreen && autoabil)
   {
     AbilScreen();
@@ -127,6 +133,7 @@ function RebornScreen(n)
     if(okbtn.length == 0) return;
     okbtn[0].click();
     rebornscreen2 = 0;
+    document.title = "REFRESH";
   }
 }
 

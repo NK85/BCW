@@ -8,6 +8,7 @@ var autoreborn = 1;
 var autoboss = 1;
 var rebornlvl = 45;
 var reborning = 0;
+var reborns = 0;
 var abilscreen = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
@@ -63,7 +64,7 @@ function AutoReborn()
 {
   SelectBuy(25);
   var av = 0;
-  for(int i = GetHeroById(-1); i < heroeslength; i++)
+  for(i = GetHeroById(-1); i < heroeslength; i++)
   {
     if(GetHeroGold(heroes[i]) < lvllimit)
     {
@@ -80,7 +81,8 @@ function AutoReborn()
 
 function Reborn()
 {
-  
+  reborning = 0;
+  reborns++;
 }
 
 function AutoBoss()

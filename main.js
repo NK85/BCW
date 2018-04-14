@@ -48,6 +48,10 @@ function bot()//loop through features
     calls--;
     return;
   }
+  UpdateHeroes();
+  if(autobuy) AutoBuy();
+  if(autoabil) AutoAbil();
+  calls--;
 }
 
 function ClickRange()//Check if stage is under clicklimit
@@ -76,10 +80,6 @@ function AbilScreen()
     abilscreen = 0;
     document.getElementsByClassName("btn-close-x")[0].click();
   }
-  UpdateHeroes();
-  if(autobuy) AutoBuy();
-  if(autoabil) AutoAbil();
-  calls--;
 }
 
 function AutoAbil()

@@ -76,7 +76,7 @@ function AutoReborn()
       av++;
       if(CheckBuy(25,heroes[i]))
       {
-        setTimeout(HeroBuy,Random(300,600),10,heroes[i]);
+        setTimeout(HeroBuy,Random(300,600),25,heroes[i]);
         return;
       }
     }

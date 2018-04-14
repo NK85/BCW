@@ -97,7 +97,7 @@ function AutoBoss()
   }
 }
 
-var GetDPS()
+function GetDPS()
 {
   return ParseGold(document.getElementsByClassName("dps-dpc-panel")[0].childNodes[1].childNodes[0].childNodes[0].data);
 }

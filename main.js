@@ -17,11 +17,11 @@ var rebornscreen2 = 0;
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
 var clicklimit = 2;
-var loopinterval = 601;
+var loopinterval = 701;
 var calls = 0;
 var delay = 5000;
-var reactionmin = 300;
-var reactionmax = 600;
+var reactionmin = 250;
+var reactionmax = 500;
 
 //document.getElementsByClassName("boss-txt")[0].click()
 //

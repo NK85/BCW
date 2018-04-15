@@ -7,7 +7,7 @@ var autobuy = 1;
 var autoabil = 1;
 var autoreborn = 1;
 var autoboss = 1;
-var rebornlvl = 45;
+var rebornlvl = 50;
 var reborning = 0;
 var reborndelay = 5000;
 var reborns = 0;
@@ -15,7 +15,7 @@ var abilscreen = 0;
 var rebornscreen1 = 0;
 var rebornscreen2 = 0;
 var freebuy = 0
-var lvllimit = ParseGold("100B");
+var lvllimit = ParseGold("1T");
 var autoclick = 1;
 var clicklimit = 2;
 var loopinterval = 701;
@@ -31,12 +31,19 @@ function DelayScript()//delay start of script
 {
   //setInterval(bot,loopinterval);
   bot();
+  setTimeout(DelayScript,loopinterval);
 }
 
 function Random(min,max)//random int
 {
   return Math.floor((Math.random() * (max-min+1))+min);
 }
+
+function DelayHeroBuy(x, i)
+{
+  setTimeout(HeroBuy,Random(reactionmin,reactionmax),x,i);
+}
+
 
 function bot()//loop through features
 {
@@ -49,12 +56,12 @@ function bot()//loop through features
   if(rebornscreen1) 
   {
     RebornScreen(1);
-    return setTimeout(bot,loopinterval);
+    return;
   }
   if(rebornscreen2) 
   {
     RebornScreen(2);
-    return setTimeout(bot,loopinterval);
+    return;
   }
   if(autoclick && ClickRange())
   {
@@ -62,7 +69,7 @@ function bot()//loop through features
     if(popup.length > 0) popup[0].children[popup[0].childElementCount-1].click();
     document.title = "CLICK";
     calls--;
-    return setTimeout(bot,loopinterval);
+    return
   }
   else
   {
@@ -75,25 +82,24 @@ function bot()//loop through features
   {
     AbilScreen();
     calls--;
-    return setTimeout(bot,loopinterval);
+    return;
   }
   UpdateHeroes();
   if(autoabil) AutoAbil();
   if(freebuy)
   {
     FreeBuy()
-    return setTimeout(bot,loopinterval);
+    return;
   }
   if(reborning == 1) 
   {
     AutoReborn();
-    return setTimeout(bot,loopinterval);
+    return;
   }
   if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
   calls--;
-  setTimeout(bot,loopinterval);
 }
 
 function FreeBuy()
@@ -104,7 +110,7 @@ function FreeBuy()
   var gold = GetGold();
   for(i = GetHeroById(-1); i < heroeslength;i++)
   {
-    var ac = GetHeroGold(heroes[i]);
+    var ac = GetHeroGold(i);
     if(ac < gold)
     {
       if(ac < mingold || mingold == 0)
@@ -120,7 +126,7 @@ function FreeBuy()
     freebuy = 0;
     return;
   }
-  setTimeout(HeroBuy,Random(reactionmin,reactionmax),25,heroes[min]);
+  DelayHeroBuy(25,min);
 }
 
 function AutoReborn()
@@ -129,12 +135,12 @@ function AutoReborn()
   var av = 0;
   for(i = GetHeroById(-1); i < heroeslength; i++)
   {
-    if(GetHeroGold(heroes[i]) < lvllimit)
+    if(GetHeroGold(i) < lvllimit)
     {
       av++;
-      if(CheckBuy(25,heroes[i]))
+      if(CheckBuy(25,i))
       {
-        setTimeout(HeroBuy,Random(reactionmin,reactionmax),25,heroes[i]);
+        DelayHeroBuy(25,i);
         return;
       }
     }
@@ -279,32 +285,30 @@ function AutoBuy()
 {
   if(unlockedheroes == 0) 
     {
-      if(CheckBuy(10,heroes[heroeslength-1]))
-      {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroes[heroeslength-1]);}
+      if(CheckBuy(10,heroeslength-1))
+      {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroeslength-1);}
     }
     else
     {
       var i = GetHeroById(-1);
-      if(GetHeroLevel(heroes[i]) < 10)
+      if(GetHeroLevel(i) < 10)
       {
-        if(CheckBuy(10,heroes[i]))
-        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),10,heroes[i]);}
-        //todo: upgrades
+        if(CheckBuy(10,i))
       }
-      else if(GetHeroLevel(heroes[i]) <= 15)
+      else if(GetHeroLevel(i) <= 15)
       {
-        if(CheckBuy(10,heroes[i]))
-        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),10,heroes[i]);}
+        if(CheckBuy(10,i))
+        DelayHeroBuy(10,i);
       }
-      else if(GetHeroLevel(heroes[i]) < 25)
+      else if(GetHeroLevel(i) < 25)
       {
-        if(CheckBuy(1,heroes[i]))
-        {setTimeout(HeroBuy,Random(reactionmin,reactionmax),1,heroes[i]);}
+        if(CheckBuy(1,i))
+        DelayHeroBuy(1,i);
       }
       else
       {
-        if(CheckBuy(10,heroes[i-1]))
-        {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroes[i-1]);}
+        if(CheckBuy(10,i-1))
+        {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),i-1);}
       }
     }
 }
@@ -351,15 +355,15 @@ function GetAbilGold(abil)//get price of given ability
   return -1;
 }
 
-function CheckBuy(x, hero)//check if x of given hero is buyable
+function CheckBuy(x, i)//check if x of given hero is buyable
 {
   SelectBuy(x);
-  return (GetHeroGold(hero) < GetGold());
+  return (GetHeroGold(i) < GetGold());
 }
   
-function HeroUnlock(hero)//unlock locked hero
+function HeroUnlock(i)//unlock locked hero
 {
-  hero.childNodes[4].click();
+  heroes[i].childNodes[4].click();
 }
 
 function SelectBuy(x)//click buy x button
@@ -382,10 +386,10 @@ function SelectBuy(x)//click buy x button
   }
 }
 
-function HeroBuy(x, hero)//buy x amount of a hero
+function HeroBuy(x, i)//buy x amount of a hero
 {
   SelectBuy(x);
-  hero.childNodes[5].click();
+  heroes[i].childNodes[5].click();
 }
 
 function GetGold()//get account gold
@@ -443,15 +447,15 @@ function ParseGold(goldt)//parse gold string
   return gold;
 }
   
-function GetHeroGold(hero)//get price of buying hero
+function GetHeroGold(i)//get price of buying hero
 {
-  var child = hero.childNodes;
+  var child = heroes[i].childNodes;
   return ParseGold(child[child.length-1].childNodes[0].childNodes[0].data);
 }
   
-function GetHeroLevel(hero)//get level of a hero
+function GetHeroLevel(i)//get level of a hero
 {
-  return parseInt(hero.childNodes[4].childNodes[0].childNodes[0].data);
+  return parseInt(heroes[i].childNodes[4].childNodes[0].childNodes[0].data);
 }
 
 setTimeout(DelayScript,delay);

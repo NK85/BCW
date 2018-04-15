@@ -294,6 +294,7 @@ function AutoBuy()
       if(GetHeroLevel(i) < 10)
       {
         if(CheckBuy(10,i))
+        DelayHeroBuy(1,i);
       }
       else if(GetHeroLevel(i) <= 15)
       {

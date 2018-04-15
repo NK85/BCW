@@ -14,7 +14,8 @@ var reborns = 0;
 var abilscreen = 0;
 var rebornscreen1 = 0;
 var rebornscreen2 = 0;
-var freebuy = 0
+var freebuy = 0;
+var refresh = 0;
 var lvllimit = ParseGold("1T");
 var autoclick = 1;
 var clicklimit = 2;
@@ -73,7 +74,11 @@ function bot()//loop through features
   }
   else
   {
-    if(document.title.indexOf("CLICK") != -1)
+    if(refresh)
+    {
+      document.title = "REFRESH";
+    }
+    else
     {
       document.title = "FT"
     }
@@ -183,7 +188,7 @@ function RebornScreen(n)
     if(okbtn.length == 0) return;
     okbtn[0].click();
     rebornscreen2 = 0;
-    document.title = "REFRESH";
+    refresh = 1;
   }
 }
 

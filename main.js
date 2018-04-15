@@ -435,6 +435,10 @@ function ParseGold(goldt)//parse gold string
   }
   switch(notation)
   {
+    case 'S':
+      gold *= 1000;
+    case 's':
+      gold *= 1000;
     case 'Q':
       gold *= 1000;
     case 'q':

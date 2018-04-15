@@ -14,6 +14,7 @@ var reborns = 0;
 var abilscreen = 0;
 var rebornscreen1 = 0;
 var rebornscreen2 = 0;
+var freebuy = 0
 var lvllimit = ParseGold("100B");
 var autoclick = 1;
 var clicklimit = 2;
@@ -78,6 +79,11 @@ function bot()//loop through features
   }
   UpdateHeroes();
   if(autoabil) AutoAbil();
+  if(freebuy)
+  {
+    FreeBuy()
+    return setTimeout(bot,loopinterval);
+  }
   if(reborning == 1) 
   {
     AutoReborn();
@@ -88,6 +94,33 @@ function bot()//loop through features
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
   calls--;
   setTimeout(bot,loopinterval);
+}
+
+function FreeBuy()
+{
+  var min = 0;
+  var mingold = 0;
+  SelectBuy(25);
+  var gold = GetGold();
+  for(i = GetHeroById(-1); i < heroeslength;i++)
+  {
+    var ac = GetHeroGold(heroes[i]);
+    if(ac < gold)
+    {
+      if(ac < mingold || mingold == 0)
+      {
+        min = i;
+        mingold = ac;
+      }
+    }
+  }
+  if(min == 0)
+  {
+    setTimeout(Reborn,reborndelay);
+    freebuy = 0;
+    return;
+  }
+  setTimeout(HeroBuy,Random(reactionmin,reactionmax),25,heroes[min]);
 }
 
 function AutoReborn()
@@ -108,8 +141,8 @@ function AutoReborn()
   }
   if(av == 0 && reborning == 1) 
   {
+    freebuy = 1;
     reborning = 2;
-    setTimeout(Reborn,reborndelay);
   }
 }
 

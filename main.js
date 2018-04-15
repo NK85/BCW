@@ -58,7 +58,7 @@ function bot()//loop through features
   if(autoclick && ClickRange())
   {
     var popup = document.getElementsByClassName("m-popup");
-    if(popup.length > 0) popup[0].children[popup[0].childElementCount].click();
+    if(popup.length > 0) popup[0].children[popup[0].childElementCount-1].click();
     document.title = "CLICK";
     calls--;
     return setTimeout(bot,loopinterval);

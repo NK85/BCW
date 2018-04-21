@@ -32,7 +32,14 @@ function DelayScript()//delay start of script
 {
   //setInterval(bot,loopinterval);
   bot();
-  setTimeout(DelayScript,loopinterval);
+  if(reborning == 2 && freebuy == 0)
+  {
+    setTimeout(DelayScript,3000)
+  }
+  else
+  {
+    setTimeout(DelayScript,loopinterval);
+  }
 }
 
 function Random(min,max)//random int

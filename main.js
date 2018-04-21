@@ -48,12 +48,6 @@ function DelayHeroBuy(x, i)
 
 function bot()//loop through features
 {
-  calls++;
-  if(calls > 1)
-  {
-    //calls--;
-    //return;
-  }
   if(rebornscreen1) 
   {
     RebornScreen(1);
@@ -64,19 +58,19 @@ function bot()//loop through features
     RebornScreen(2);
     return;
   }
-  if(autoclick && ClickRange())
+  if(autoclick && ClickRange() && refresh == 0)
   {
     var popup = document.getElementsByClassName("m-popup");
     if(popup.length > 0) popup[0].children[popup[0].childElementCount-1].click();
     document.title = "CLICK";
-    calls--;
-    return
+    return;
   }
   else
   {
     if(refresh)
     {
       document.title = "REFRESH";
+      return;
     }
     else
     {
@@ -86,7 +80,6 @@ function bot()//loop through features
   if(abilscreen && autoabil)
   {
     AbilScreen();
-    calls--;
     return;
   }
   UpdateHeroes();
@@ -104,7 +97,6 @@ function bot()//loop through features
   if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
-  calls--;
 }
 
 function FreeBuy()

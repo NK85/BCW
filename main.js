@@ -32,7 +32,7 @@ function DelayScript()//delay start of script
 {
   //setInterval(bot,loopinterval);
   bot();
-  if(reborning == 2 && freebuy == 0)
+  if((reborning == 2 && freebuy == 0) || rebornscreen1 || rebornscreen2)
   {
     setTimeout(DelayScript,3000)
   }

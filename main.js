@@ -26,6 +26,7 @@ var reactionmin = 250;
 var reactionmax = 500;
 
 var timedelayscript = null;
+var timedelayherobuy = null;
 var timedelayreborn = null;
 var timedelayherounlock = null;
 var timedelayabilbuy = null;

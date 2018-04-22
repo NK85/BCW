@@ -25,6 +25,11 @@ var delay = 5000;
 var reactionmin = 250;
 var reactionmax = 500;
 
+var timedelayscript = null;
+var timedelayreborn = null;
+var timedelayherounlock = null;
+var timedelayabilbuy = null;
+
 //document.getElementsByClassName("boss-txt")[0].click()
 //
 
@@ -32,26 +37,81 @@ function DelayScript()//delay start of script
 {
   //setInterval(bot,loopinterval);
   bot();
+  clearTimeout(timedelayscript);
   if((reborning == 2 && freebuy == 0) || rebornscreen1 || rebornscreen2)
   {
-    setTimeout(DelayScript,3000)
+    timedelayscript = setTimeout(DelayScript,3000)
   }
   else
   {
-    setTimeout(DelayScript,loopinterval);
+    timedelayscript = setTimeout(DelayScript,loopinterval);
   }
+}
+
+function DelayHeroBuy(x, i)
+{
+  if(timedelayherobuy == null)
+  {
+    timedelayherobuy = setTimeout(DelayHeroBuy2,Random(reactionmin,reactionmax),x,i);
+  }
+}
+
+function DelayHeroBuy2(x,i)
+{
+  clearTimeout(timedelayherobuy);
+  timedelayherobuy = null;
+  HeroBuy(x,i);
+}
+
+function DelayReborn()
+{
+  if(timedelayreborn == null)
+  {
+    timedelayreborn = setTimeout(DelayReborn2,reborndelay);
+  }
+}
+
+function DelayReborn2()
+{
+  clearTimeout(timedelayreborn);
+  timedelayreborn = null;
+  Reborn();
+}
+
+function DelayAbilBuy(abil)
+{
+  if(timedelayabilbuy == null)
+  {
+    timedelayabilbuy = setTimeout(DelayAbilBuy2,Random(reactionmin,reactionmax),abils[i]);
+  }
+}
+
+function DelayAbilBuy2(abil)
+{
+  clearTimeout(timedelayabilbuy);
+  timedelayabilbuy = null;
+  AbilBuy(abil);
+}
+
+function DelayHeroUnlock(i)
+{
+  if(timedelayherounlock == null)
+  {
+    timedelayherounlock = setTimeout(DelayHeroUnlock2,Random(reactionmin,reactionmax),i);
+  }
+}
+
+function DelayHeroUnlock2(i)
+{
+  clearTimeout(timedelayherounlock);
+  timedelayherounlock = null;
+  HeroUnlock(i);
 }
 
 function Random(min,max)//random int
 {
   return Math.floor((Math.random() * (max-min+1))+min);
 }
-
-function DelayHeroBuy(x, i)
-{
-  setTimeout(HeroBuy,Random(reactionmin,reactionmax),x,i);
-}
-
 
 function bot()//loop through features
 {
@@ -257,7 +317,7 @@ function AbilScreen()
   {
     if(CheckAbil(abils[i]))
     {
-      setTimeout(AbilBuy,Random(reactionmin,reactionmax),abils[i]);
+      DelayAbilBuy(abils[i]);
       break;
     }
   }
@@ -290,7 +350,9 @@ function AutoBuy()
   if(unlockedheroes == 0) 
     {
       if(CheckBuy(10,heroeslength-1))
-      {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),heroeslength-1);}
+      {
+        DelayHeroUnlock(heroeslength-1);
+      }
     }
     else
     {
@@ -313,7 +375,9 @@ function AutoBuy()
       else
       {
         if(CheckBuy(10,i-1))
-        {setTimeout(HeroUnlock,Random(reactionmin,reactionmax),i-1);}
+        {
+          DelayHeroUnlock(i-1);
+        }
       }
     }
 }
@@ -471,4 +535,4 @@ function GetHeroLevel(i)//get level of a hero
   return parseInt(heroes[i].childNodes[4].childNodes[0].childNodes[0].data);
 }
 
-setTimeout(DelayScript,delay);
+timedelayscript = setTimeout(DelayScript,delay);

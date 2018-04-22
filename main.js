@@ -186,7 +186,7 @@ function FreeBuy()
   }
   if(min == 0)
   {
-    setTimeout(Reborn,reborndelay);
+    DelayReborn();
     freebuy = 0;
     return;
   }

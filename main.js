@@ -83,7 +83,7 @@ function DelayAbilBuy(abil)
 {
   if(timedelayabilbuy == null)
   {
-    timedelayabilbuy = setTimeout(DelayAbilBuy2,Random(reactionmin,reactionmax),abils[i]);
+    timedelayabilbuy = setTimeout(DelayAbilBuy2,Random(reactionmin,reactionmax),abil);
   }
 }
 

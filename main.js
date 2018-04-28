@@ -351,6 +351,7 @@ function AbilScreen()
 function AutoAbil()
 {
     if(unlockedheroes == 0) return;
+    if(heroes == null || heroes[0] == null) return;
     for(j = GetHeroById(-1); j < heroeslength; j++)
     {
       var abil = heroes[j].childNodes[1];
@@ -367,6 +368,7 @@ function AutoAbil()
 
 function AutoBuy()
 {
+  if(heroes == null || heroes[0] == null) return;
   if(unlockedheroes == 0) 
     {
       if(CheckBuy(10,heroeslength-1))

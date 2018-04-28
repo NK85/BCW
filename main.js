@@ -31,9 +31,6 @@ var timedelayreborn = null;
 var timedelayherounlock = null;
 var timedelayabilbuy = null;
 
-//document.getElementsByClassName("boss-txt")[0].click()
-//
-
 function DelayScript()//delay start of script
 {
   //setInterval(bot,loopinterval);
@@ -270,12 +267,18 @@ function AutoBoss()
 
 function GetDPS()
 {
-  return ParseGold(document.getElementsByClassName("dps-dpc-panel")[0].childNodes[1].childNodes[0].childNodes[0].data);
+  var aux = document.getElementsByClassName("dps-dpc-panel");
+  if(aux.length > 0)
+  {
+    return ParseGold(aux[0].childNodes[1].childNodes[0].childNodes[0].data);
+  }
+  return 0;
 }
 
 function GetBossHP()
 {
   var lvl = GetBossLevel();
+  if(lvl == 0) return 0;
   var hp = GetStageHP();
   switch(lvl[lvl.length-1] % 5)
   {
@@ -295,7 +298,12 @@ function GetBossHP()
 
 function GetStageHP()
 {
-  return ParseGold(document.getElementsByClassName("to")[0].childNodes[0].data);
+  var aux = document.getElementsByClassName("to");
+  if(aux.length > 0)
+  {
+    return ParseGold(aux[0].childNodes[0].data);
+  }
+  return 0;
 }
 
 function BossUnlocked()
@@ -307,12 +315,19 @@ function BossUnlocked()
 
 function ClickRange()//Check if stage is under clicklimit
 {
+  var bosslvl = GetBossLevel();
+  if(bosslvl == 0) return false;
   return (GetBossLevel() <= clicklimit);
 }
 
 function GetBossLevel()//return boss level
 {
-  return parseInt(document.getElementsByClassName("boss-lvl")[0].childNodes[2].childNodes[0].data);
+  var aux = document.getElementsByClassName("boss-lvl");
+  if(aux.length > 0)
+  {
+    return parseInt(aux[0].childNodes[2].childNodes[0].data);
+  }
+  return 0;
 }
 
 function AbilScreen()
@@ -326,7 +341,7 @@ function AbilScreen()
       break;
     }
   }
-  if(i == abils.length)
+  if(i == abils.length && i != 0)
   {
     abilscreen = 0;
     document.getElementsByClassName("btn-close-x")[0].click();
@@ -389,7 +404,9 @@ function AutoBuy()
 
 function UpdateHeroes()//update heroes info
 {
-  heroes = document.getElementsByClassName("hero-card");
+  var aux = document.getElementsByClassName("hero-card");
+  if(aux.length == 0) return;
+  heroes = aux;
   heroeslength = heroes.length - 2;
   for(unlockedheroes = 0; unlockedheroes < heroeslength; unlockedheroes++)
   {
@@ -442,7 +459,9 @@ function HeroUnlock(i)//unlock locked hero
 
 function SelectBuy(x)//click buy x button
 {
-  var buyx = document.getElementsByClassName("all-x2-panel-box")[0].childNodes;
+  var aux = document.getElementsByClassName("all-x2-panel-box");
+  if(aux.length == 0) return;
+  var buyx = aux[0].childNodes;
   switch(x)
   {
     case 1:
@@ -468,7 +487,9 @@ function HeroBuy(x, i)//buy x amount of a hero
 
 function GetGold()//get account gold
 {
-  return ParseGold(document.getElementsByClassName("res gold")[0].childNodes[0].childNodes[0].data);
+  var aux = document.getElementsByClassName("res gold");
+  if(aux.length == 0) return 0;
+  return ParseGold(aux[0].childNodes[0].childNodes[0].data);
 }
 
 function ParseGold(goldt)//parse gold string

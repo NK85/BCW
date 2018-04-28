@@ -9,7 +9,7 @@ var autoreborn = 1;
 var autoboss = 1;
 var rebornlvl = 50;
 var reborning = 0;
-var reborndelay = 5000;
+var reborndelay = 3000;
 var reborns = 0;
 var abilscreen = 0;
 var rebornscreen1 = 0;
@@ -126,6 +126,10 @@ function bot()//loop through features
     RebornScreen(2);
     return;
   }
+  if(freebuy == 2)
+  {
+    return;
+  }
   if(autoclick && ClickRange() && refresh == 0)
   {
     var popup = document.getElementsByClassName("m-popup");
@@ -188,7 +192,7 @@ function FreeBuy()
   if(min == 0)
   {
     DelayReborn();
-    freebuy = 0;
+    freebuy = 2;
     return;
   }
   DelayHeroBuy(25,min);

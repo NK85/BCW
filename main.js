@@ -126,10 +126,6 @@ function bot()//loop through features
     RebornScreen(2);
     return;
   }
-  if(freebuy == 2)
-  {
-    return;
-  }
   if(autoclick && ClickRange() && refresh == 0)
   {
     var popup = document.getElementsByClassName("m-popup");
@@ -148,6 +144,10 @@ function bot()//loop through features
     {
       document.title = "FT"
     }
+  }
+  if(freebuy == 2)
+  {
+    return;
   }
   if(abilscreen && autoabil)
   {

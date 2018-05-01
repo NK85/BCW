@@ -30,6 +30,7 @@ var timedelayherobuy = null;
 var timedelayreborn = null;
 var timedelayherounlock = null;
 var timedelayabilbuy = null;
+var timedelayreborn2 = null;
 
 function DelayScript()//delay start of script
 {
@@ -73,7 +74,15 @@ function DelayReborn2()
 {
   clearTimeout(timedelayreborn);
   timedelayreborn = null;
+  if(timedelayreborn2 == null) timedelayreborn2 = setTimeout(DelayReborn3,reborndelay);
   Reborn();
+}
+
+function DelayReborn3()
+{
+  clearTimeout(timedelayreborn2);
+  timedelayreborn2 = null;
+  document.title = "REFRESH";
 }
 
 function DelayAbilBuy(abil)

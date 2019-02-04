@@ -176,6 +176,7 @@ function bot()//loop through features
   if(progressbuy)
   {
     ProgressBuy();
+    if(autoboss) AutoBoss();
     return;
   }
   if(autobuy) AutoBuy();
@@ -590,6 +591,7 @@ function SelectBuy(x)//click buy x button
       break;
     case 200:
       buyx[4].click();
+      break;
   }
 }
 

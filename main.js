@@ -185,6 +185,7 @@ function bot()//loop through features
 
 function ProgressBuy()
 {
+  var ac = 0;
   SelectBuy(25);
   var gold = GetGold();
   var i = GetHeroById(-1);
@@ -205,21 +206,22 @@ function ProgressBuy()
   }
   else
   {
-    if((chiefgold / 10) > GetHeroGold(i+1))
+    ac = GetHeroGold(i+1);
+    if((chiefgold / 10) > ac)
     {
-      if(GetHeroGold(i+1) < gold)
+      if(ac < gold)
       {
-        if((GetHeroGold(i+1) * 2000000) < (chiefgold / 10))
+        if((ac * 2000000) < (chiefgold / 10))
         {
-          if((GetHeroGold(i+1) * 2000000) < gold)
+          if((ac * 2000000) < gold)
           {
             DelayHeroBuy(200,i+1);
             return;
           }
         }
-        else if((GetHeroGold(i+1) * 1000) < (chiefgold / 10))
+        else if((ac * 1000) < (chiefgold / 10))
         {
-          if((GetHeroGold(i+1) * 1000) < gold)
+          if((ac * 1000) < gold)
           {
             DelayHeroBuy(100,i+1);
             return;
@@ -233,7 +235,7 @@ function ProgressBuy()
     {
       var div = j - i - 1 * 100;
       if(div > 1000) div = 1000;
-      var ac = GetHeroGold(j);
+      ac = GetHeroGold(j);
       if(chiefgold / div > ac)
       {
         if(ac < gold)
@@ -586,6 +588,8 @@ function SelectBuy(x)//click buy x button
     case 100:
       buyx[3].click();
       break;
+    case 200:
+      buyx[4].click();
   }
 }
 

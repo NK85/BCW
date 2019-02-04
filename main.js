@@ -16,6 +16,7 @@ var rebornscreen1 = 0;
 var rebornscreen2 = 0;
 var freebuy = 0;
 var refresh = 0;
+var progressbuy = 0;
 var lvllimit = ParseGold("1T");
 var autoclick = 1;
 var clicklimit = 1;
@@ -172,9 +173,51 @@ function bot()//loop through features
     AutoReborn();
     return;
   }
+  if(progressbuy)
+  {
+    ProgressBuy();
+    return;
+  }
   if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
+}
+
+function ProgressBuy()
+{
+  SelectBuy(25);
+  var gold = GetGold();
+  var i = GetHeroById(-1);
+  var chiefgold = GetHeroGold(i)
+  if(chiefgold < gold)
+  {
+    DelayHeroBuy(25,i);
+  }
+  else
+  {
+    if(chiefgold / 10 > GetHeroGold(i+1))
+    {
+      if(GetHeroGold(i+1) < gold)
+      {
+        DelayHeroBuy(25,i+1);
+        return
+      }
+    }
+    for(j = i + 2; j < heroeslength;j++)
+    {
+      var div = j - i - 1 * 100;
+      if(div > 1000) div = 1000;
+      var ac = GetHeroGold(j);
+      if(chiefgold / div > ac)
+      {
+        if(ac < gold)
+        {
+          DelayHeroBuy(25,j);
+          return;
+        }
+      }
+    }
+  }
 }
 
 function FreeBuy()
@@ -405,6 +448,11 @@ function AutoBuy()
       }
       else
       {
+        if(i-1 == 0)
+        {
+          progressbuy = 1;
+          return;
+        }
         if(CheckBuy(10,i-1))
         {
           DelayHeroUnlock(i-1);

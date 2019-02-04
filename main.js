@@ -191,14 +191,40 @@ function ProgressBuy()
   var chiefgold = GetHeroGold(i)
   if(chiefgold < gold)
   {
+    if((chiefgold * 2000000) < gold)
+    {
+      DelayHeroBuy(200,i);
+      return;
+    }
+    else if((chiefgold * 1000) < gold)
+    {
+      DelayHeroBuy(100,i);
+      return;
+    }
     DelayHeroBuy(25,i);
   }
   else
   {
-    if(chiefgold / 10 > GetHeroGold(i+1))
+    if((chiefgold / 10) > GetHeroGold(i+1))
     {
       if(GetHeroGold(i+1) < gold)
       {
+        if((GetHeroGold(i+1) * 2000000) < (chiefgold / 10))
+        {
+          if((GetHeroGold(i+1) * 2000000) < gold)
+          {
+            DelayHeroBuy(200,i+1);
+            return;
+          }
+        }
+        else if((GetHeroGold(i+1) * 1000) < (chiefgold / 10))
+        {
+          if((GetHeroGold(i+1) * 1000) < gold)
+          {
+            DelayHeroBuy(100,i+1);
+            return;
+          }
+        }
         DelayHeroBuy(25,i+1);
         return
       }
@@ -212,6 +238,22 @@ function ProgressBuy()
       {
         if(ac < gold)
         {
+          if((ac * 2000000) < (chiefgold / div))
+          {
+            if((ac * 2000000) < gold)
+            {
+              DelayHeroBuy(200,j);
+              return;
+            }
+          }
+          else if((ac * 1000) < (chiefgold / div))
+          {
+            if((ac * 1000) < gold)
+            {
+              DelayHeroBuy(100,j);
+              return;
+            }
+          }
           DelayHeroBuy(25,j);
           return;
         }
@@ -244,7 +286,16 @@ function FreeBuy()
     freebuy = 2;
     return;
   }
-  DelayHeroBuy(25,min);
+  var sbuy = 25;
+  if((mingold * 100000) < gold)
+  {
+    sbuy = 100;
+  }
+  if((mingold * 200000000) < gold)
+  {
+    sbuy = 200;
+  }
+  DelayHeroBuy(sbuy,min);
 }
 
 function AutoReborn()

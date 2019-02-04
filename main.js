@@ -444,7 +444,7 @@ function AbilScreen()
       break;
     }
   }
-  if(i == abils.length && i != 0)
+  if(i == abils.length)
   {
     abilscreen = 0;
     document.getElementsByClassName("btn-close-x")[0].click();

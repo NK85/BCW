@@ -5,7 +5,7 @@ var heroeslength;
 var enablebot = 1;
 var autobuy = 1;
 var autoabil = 1;
-var autoreborn = 1;
+var autoreborn = 0;
 var autoboss = 1;
 var rebornlvl = 50;
 var reborning = 0;
@@ -173,13 +173,12 @@ function bot()//loop through features
     AutoReborn();
     return;
   }
+  if(autobuy) AutoBuy();
   if(progressbuy)
   {
     ProgressBuy();
-    if(autoboss) AutoBoss();
-    return;
+    progressbuy = 0
   }
-  if(autobuy) AutoBuy();
   if(autoboss) AutoBoss();
   if(autoreborn && GetBossLevel() > rebornlvl) reborning = 1; 
 }
@@ -191,22 +190,6 @@ function ProgressBuy()
   var gold = GetGold();
   var i = GetHeroById(-1);
   var chiefgold = GetHeroGold(i)
-  if(chiefgold < gold)
-  {
-    if((chiefgold * 2000000) < gold)
-    {
-      DelayHeroBuy(200,i);
-      return;
-    }
-    else if((chiefgold * 1000) < gold)
-    {
-      DelayHeroBuy(100,i);
-      return;
-    }
-    DelayHeroBuy(25,i);
-  }
-  else
-  {
     ac = GetHeroGold(i+1);
     if((chiefgold / 10) > ac)
     {
@@ -232,7 +215,7 @@ function ProgressBuy()
         return
       }
     }
-    for(j = i + 2; j < heroeslength;j++)
+    for(var j = i + 2; j < heroeslength;j++)
     {
       var div = j - i - 1 * 100;
       if(div > 1000) div = 1000;
@@ -262,7 +245,6 @@ function ProgressBuy()
         }
       }
     }
-  }
 }
 
 function FreeBuy()
@@ -271,7 +253,7 @@ function FreeBuy()
   var mingold = 0;
   SelectBuy(25);
   var gold = GetGold();
-  for(i = GetHeroById(-1); i < heroeslength;i++)
+  for(var i = GetHeroById(-1); i < heroeslength;i++)
   {
     var ac = GetHeroGold(i);
     if(ac < gold)
@@ -305,7 +287,7 @@ function AutoReborn()
 {
   SelectBuy(25);
   var av = 0;
-  for(i = GetHeroById(-1); i < heroeslength; i++)
+  for(var i = GetHeroById(-1); i < heroeslength; i++)
   {
     if(GetHeroGold(i) < lvllimit)
     {
@@ -327,7 +309,7 @@ function AutoReborn()
 function Reborn()
 {
   var quests = document.getElementsByClassName("quests")[0];
-  for(i = 0; i < quests.childElementCount; i++)
+  for(var i = 0; i < quests.childElementCount; i++)
   {
     if(quests.children[i].childNodes[0].currentSrc.indexOf("reborn") != -1)
     {
@@ -439,7 +421,7 @@ function GetBossLevel()//return boss level
 function AbilScreen()
 {
   var abils = document.getElementsByClassName("abil locked");
-  for(i = 0;i < abils.length;i++)
+  for(var i = 0;i < abils.length;i++)
   {
     if(CheckAbil(abils[i]))
     {
@@ -458,7 +440,7 @@ function AutoAbil()
 {
     if(unlockedheroes == 0) return;
     if(heroes == null || heroes[0] == null) return;
-    for(j = GetHeroById(-1); j < heroeslength; j++)
+    for(var j = GetHeroById(-1); j < heroeslength; j++)
     {
       var abil = heroes[j].childNodes[1];
       if(abil.data == null)
@@ -624,7 +606,7 @@ function ParseGold(goldt)//parse gold string
       }
       else
       {
-        for(j = i; j < goldt.length; j++)
+        for(var j = i; j < goldt.length; j++)
         {
           notation += goldt[j];
         }

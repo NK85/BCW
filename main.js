@@ -470,17 +470,35 @@ function AutoBuy()
       if(GetHeroLevel(i) < 10)
       {
         if(CheckBuy(10,i))
-        DelayHeroBuy(10,i);
+        {
+          DelayHeroBuy(10,i);
+        }
+        else
+        {
+          progressbuy = 1;
+        }
       }
       else if(GetHeroLevel(i) <= 15)
       {
         if(CheckBuy(10,i))
-        DelayHeroBuy(10,i);
+        {
+          DelayHeroBuy(10,i);
+        }
+        else
+        {
+          progressbuy = 1;
+        }
       }
       else if(GetHeroLevel(i) < 25)
       {
         if(CheckBuy(1,i))
-        DelayHeroBuy(1,i);
+        {
+          DelayHeroBuy(1,i);
+        }
+        else
+        {
+          progressbuy = 1;
+        }
       }
       else
       {

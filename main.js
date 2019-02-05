@@ -279,6 +279,11 @@ function FreeBuy()
   {
     return;
   }
+  if(fastreborn && mingold > frlimit)
+  {
+    freebuy = 1;
+    reborning = 2;
+  }
   var sbuy = 25;
   if((mingold * 100000) < gold)
   {

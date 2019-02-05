@@ -17,6 +17,8 @@ var rebornscreen2 = 0;
 var freebuy = 0;
 var refresh = 0;
 var progressbuy = 0;
+var fastreborn = 0;
+var frlimit = ParseGold("1T");
 var lvllimit = ParseGold("1T");
 var autoclick = 1;
 var clicklimit = 1;
@@ -163,7 +165,7 @@ function bot()//loop through features
   }
   UpdateHeroes();
   if(autoabil) AutoAbil();
-  if(freebuy)
+  if(freebuy || fastreborn)
   {
     FreeBuy()
     return;
@@ -217,10 +219,10 @@ function ProgressBuy()
     }
     for(var j = i + 2; j < heroeslength;j++)
     {
-      var div = j - i - 1 * 100;
+      var div = (j - i - 1) * 100;
       if(div > 1000) div = 1000;
       ac = GetHeroGold(j);
-      if(chiefgold / div > ac)
+      if((chiefgold / div) > ac)
       {
         if(ac < gold)
         {
@@ -253,7 +255,9 @@ function FreeBuy()
   var mingold = 0;
   SelectBuy(25);
   var gold = GetGold();
-  for(var i = GetHeroById(-1); i < heroeslength;i++)
+  var ti = GetHeroById(-1) - 1;
+  if(ti == 0) ti = 1;
+  for(var i = ti; i < heroeslength;i++)
   {
     var ac = GetHeroGold(i);
     if(ac < gold)
@@ -265,10 +269,14 @@ function FreeBuy()
       }
     }
   }
-  if(min == 0)
+  if(min == 0 && freebuy == 1)
   {
     DelayReborn();
     freebuy = 2;
+    return;
+  }
+  else if(min == 0)
+  {
     return;
   }
   var sbuy = 25;
@@ -280,7 +288,14 @@ function FreeBuy()
   {
     sbuy = 200;
   }
-  DelayHeroBuy(sbuy,min);
+  if(min == (GetHeroById(-1) - 1))
+  {
+    DelayHeroUnlock(min)
+  }
+  else
+  {
+    DelayHeroBuy(sbuy,min);
+  }
 }
 
 function AutoReborn()
@@ -510,6 +525,10 @@ function AutoBuy()
         if(CheckBuy(10,i-1))
         {
           DelayHeroUnlock(i-1);
+        }
+        else
+        {
+          progressbuy = 1;
         }
       }
     }
